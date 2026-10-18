@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Unique user ID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp via serverTimestamp()" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp via serverTimestamp()" }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "Memory": {
+      "title": "Memory",
+      "description": "Learned memory directive stored in Ev's brain",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Title of the memory" },
+        "content": { "type": "string", "description": "Content of the memory" },
+        "category": { "type": "string", "description": "Category (PREFERENCE, RULE, SKILL, KNOWLEDGE)" },
+        "isActive": { "type": "boolean", "description": "Whether memory is active in system directives" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["title", "content", "category", "isActive", "createdAt"]
+    },
+    "LearningTopic": {
+      "title": "LearningTopic",
+      "description": "Topic that Ev and the user are learning together",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Topic title" },
+        "category": { "type": "string", "description": "Category (Coding, Language, Science, etc.)" },
+        "summary": { "type": "string", "description": "Topic summary" },
+        "masteryPercent": { "type": "integer", "description": "Mastery percentage from 0 to 100" },
+        "keyTakeaways": { "type": "string", "description": "Key points learned" },
+        "flashcardCount": { "type": "integer", "description": "Number of flashcards created" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["title", "category", "summary", "masteryPercent", "createdAt"]
+    },
+    "Flashcard": {
+      "title": "Flashcard",
+      "description": "Study flashcard for a learning topic",
+      "type": "object",
+      "properties": {
+        "front": { "type": "string", "description": "Question or prompt" },
+        "back": { "type": "string", "description": "Answer or explanation" },
+        "isMastered": { "type": "boolean", "description": "Whether card is mastered" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["front", "back", "isMastered", "createdAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Message in conversation history with Ev",
+      "type": "object",
+      "properties": {
+        "sender": { "type": "string", "description": "'user' or 'ev'" },
+        "text": { "type": "string", "description": "Message text" },
+        "mode": { "type": "string", "description": "STANDARD, HIGH_THINKING, or GOOGLE_SEARCH" },
+        "thinkingProcess": { "type": "string", "description": "Deep thinking reasoning from gemini-4-argon" },
+        "searchSourcesJson": { "type": "string", "description": "JSON array of web citations" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Message timestamp" }
+      },
+      "required": ["sender", "text", "mode", "createdAt"]
+    },
+    "LearnedTask": {
+      "title": "LearnedTask",
+      "description": "Task Ev has learned to execute for the user",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Task name" },
+        "description": { "type": "string", "description": "Task description" },
+        "iconName": { "type": "string", "description": "Icon identifier" },
+        "preferredMode": { "type": "string", "description": "STANDARD, HIGH_THINKING, or GOOGLE_SEARCH" },
+        "promptTemplate": { "type": "string", "description": "Prompt template with {input}" },
+        "requiresInput": { "type": "boolean", "description": "Whether task requires user input" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Update timestamp" }
+      },
+      "required": ["name", "description", "iconName", "preferredMode", "promptTemplate", "requiresInput", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile collection"
+    },
+    "/users/{userId}/memories/{memoryId}": {
+      "schema": "Memory",
+      "description": "Ev learned memories and directives"
+    },
+    "/users/{userId}/topics/{topicId}": {
+      "schema": "LearningTopic",
+      "description": "User learning topics"
+    },
+    "/users/{userId}/topics/{topicId}/flashcards/{flashcardId}": {
+      "schema": "Flashcard",
+      "description": "Flashcards for learning topics"
+    },
+    "/users/{userId}/chat_messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Chat messages with Ev"
+    },
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": "LearnedTask",
+      "description": "Learned tasks and actions"
+    }
+  }
+}
